@@ -19,27 +19,27 @@ use SilverStripe\Widgets\Model\WidgetArea;
  */
 class WidgetPageExtension extends Extension
 {
-    private static $db = [
+    private static array $db = [
         'InheritSideBar' => 'Boolean',
     ];
 
-    private static $defaults = [
+    private static array $defaults = [
         'InheritSideBar' => true
     ];
 
-    private static $has_one = [
+    private static array $has_one = [
         'SideBar' => WidgetArea::class,
     ];
 
-    private static $owns = [
+    private static array $owns = [
         'SideBar',
     ];
 
-    private static $cascade_deletes = [
+    private static array $cascade_deletes = [
         'SideBar',
     ];
 
-    public function updateCMSFields(FieldList $fields)
+    public function updateCMSFields(FieldList $fields): void
     {
         $fields->addFieldToTab(
             "Root.Widgets",
@@ -52,21 +52,27 @@ class WidgetPageExtension extends Extension
     }
 
     /**
-     * @return WidgetArea
+     * @return ?WidgetArea
      */
-    public function SideBarView()
+    public function SideBarView(): ?WidgetArea
     {
-        if ($this->owner->InheritSideBar
-            && ($parent = $this->owner->getParent())
+        if ($this->owner->InheritSideBar && ($parent = $this->owner->getParent())
             && $parent->hasMethod('SideBarView')
         ) {
             return $parent->SideBarView();
-        } elseif ($this->owner->SideBar()->exists()) {
-            return $this->owner->SideBar();
         }
+
+        if (!$this->owner->SideBar()->exists()) {
+            return null;
+        }
+
+        return $this->owner->SideBar();
     }
 
-    public function onBeforeDuplicate($duplicatePage)
+    /**
+     * @inheritDoc
+     */
+    public function onBeforeDuplicate($duplicatePage): mixed
     {
         if ($this->owner->hasField('SideBarID')) {
             $sideBar = $this->owner->getComponent('SideBar');
