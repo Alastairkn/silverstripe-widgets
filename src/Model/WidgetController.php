@@ -56,7 +56,7 @@ class WidgetController extends Controller
      * @param ?string $action
      * @return string
      */
-    public function Link(?string $action = null): string
+    public function Link($action = null)
     {
         $id = ($this->widget) ? $this->widget->ID : null;
         $segment = Controller::join_links('widget', $id, $action);

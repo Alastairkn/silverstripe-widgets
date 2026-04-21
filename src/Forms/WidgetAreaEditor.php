@@ -38,7 +38,7 @@ class WidgetAreaEditor extends FormField
      *
      * @return string - HTML
      */
-    public function FieldHolder(array $properties = []): string
+    public function FieldHolder($properties = [])
     {
         Requirements::css('silverstripe/widgets:client/dist/styles/WidgetAreaEditor.css');
         Requirements::javascript('silverstripe/widgets:client/dist/js/WidgetAreaEditor.js');
